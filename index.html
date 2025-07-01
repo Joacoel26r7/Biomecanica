@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Biomecánico de la Carrera</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Lato:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --accent-color: #e74c3c;
+            --text-color: #333;
+            --bg-color: #fff;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #2980b9;
+            --secondary-color: #27ae60;
+            --dark-color: #ecf0f1;
+            --light-color: #2c3e50;
+            --accent-color: #c0392b;
+            --text-color: #f5f5f5;
+            --bg-color: #121212;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+        }
+
+.contenedor {
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+  padding: 10px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.responsive-media {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  display: block;
+  margin: 0 auto 15px auto;
+}
+
+@media (max-width: 480px) {
+  .responsive-media {
+    border-radius: 6px;
+  }
+}
+
+
+        /* Header/Landing */
+        .landing {
+            height: 100vh;
+            min-height: 500px;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1552674605-db6ffd4facb5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .landing h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInDown 1s ease;
+        }
+
+        .landing p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--dark-color);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        nav ul li {
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            color: var(--light-color);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        nav ul li a:hover {
+            background-color: var(--primary-color);
+        }
+
+        /* Sections */
+        section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        section h2 {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            position: relative;
+        }
+
+        section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--secondary-color);
+            border-radius: 2px;
+        }
+
+        .card {
+            background: var(--light-color);
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            color: var(--dark-color);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .card i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: var(--light-color);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            margin: 5px;
+        }
+
+        .tab-btn:first-child {
+            border-radius: 5px 0 0 5px;
+        }
+
+        .tab-btn:last-child {
+            border-radius: 0 5px 5px 0;
+        }
+
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            display: block;
+            overflow-x: auto;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            min-width: 120px;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        tr:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Charts container */
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 30px 0;
+            min-width: 300px;
+        }
+
+        /* Accordion */
+        .accordion-item {
+            margin-bottom: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .accordion-header {
+            padding: 15px 20px;
+            background: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .accordion-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            background: var(--light-color);
+        }
+
+        .accordion-item.active .accordion-content {
+            padding: 20px;
+            max-height: 1000px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-color);
+            color: var(--light-color);
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            section {
+                padding: 70px 20px;
+            }
+            
+            .card {
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .landing h1 {
+                font-size: 3rem;
+            }
+            
+            .landing p {
+                font-size: 1.3rem;
+            }
+            
+            section h2 {
+                font-size: 2.2rem;
+                margin-bottom: 40px;
+            }
+            
+            .card h3 {
+                font-size: 1.3rem;
+            }
+            
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .landing {
+                min-height: 400px;
+            }
+            
+            .landing h1 {
+                font-size: 2.5rem;
+            }
+            
+            .landing p {
+                font-size: 1.2rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .btn {
+                padding: 10px 25px;
+                font-size: 1rem;
+            }
+            
+            nav ul {
+                padding: 0.8rem 0;
+            }
+            
+            nav ul li {
+                margin: 0 5px;
+            }
+            
+            nav ul li a {
+                font-size: 0.8rem;
+                padding: 5px 8px;
+            }
+            
+            section {
+                padding: 60px 15px;
+            }
+            
+            section h2 {
+                font-size: 2rem;
+                margin-bottom: 30px;
+            }
+            
+            section h2::after {
+                width: 80px;
+                height: 3px;
+                bottom: -12px;
+            }
+            
+            .card {
+                padding: 20px;
+                margin-bottom: 25px;
+            }
+            
+            .card h3 {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+            
+            .card i {
+                font-size: 1.8rem;
+                margin-bottom: 10px;
+            }
+            
+            .chart-container {
+                height: 300px;
+                margin: 20px 0;
+            }
+            
+            th, td {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .theme-toggle {
+                width: 45px;
+                height: 45px;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .landing {
+                min-height: 350px;
+            }
+            
+            .landing h1 {
+                font-size: 2rem;
+            }
+            
+            .landing p {
+                font-size: 1rem;
+                margin-bottom: 1.2rem;
+            }
+            
+            .btn {
+                padding: 8px 20px;
+                font-size: 0.9rem;
+            }
+            
+            nav ul {
+                padding: 0.5rem 0;
+                justify-content: space-around;
+            }
+            
+            nav ul li {
+                margin: 0 2px;
+            }
+            
+            nav ul li a {
+                font-size: 0.7rem;
+                padding: 3px 5px;
+            }
+            
+            section {
+                padding: 50px 10px;
+            }
+            
+            section h2 {
+                font-size: 1.8rem;
+                margin-bottom: 25px;
+            }
+            
+            section h2::after {
+                width: 60px;
+                height: 2px;
+                bottom: -10px;
+            }
+            
+            .card {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .card h3 {
+                font-size: 1.1rem;
+            }
+            
+            .card i {
+                font-size: 1.5rem;
+                margin-bottom: 8px;
+            }
+            
+            .tabs {
+                margin-bottom: 20px;
+            }
+            
+            .tab-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .chart-container {
+                height: 250px;
+                margin: 15px 0;
+            }
+            
+            th, td {
+                padding: 8px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .accordion-header {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .accordion-item.active .accordion-content {
+                padding: 15px;
+            }
+            
+            footer {
+                padding: 20px 0;
+                font-size: 0.9rem;
+            }
+            
+            .theme-toggle {
+                width: 40px;
+                height: 40px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .landing h1 {
+                font-size: 1.8rem;
+            }
+            
+            nav ul li a {
+                font-size: 0.65rem;
+                padding: 2px 4px;
+            }
+            
+            section h2 {
+                font-size: 1.6rem;
+            }
+            
+            .card {
+                padding: 12px;
+            }
+            
+            .tab-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+                margin: 3px;
+            }
+            
+            .chart-container {
+                height: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Landing Page -->
+    <header class="landing" id="inicio">
+        <h1>Análisis Biomecánico de la Carrera</h1>
+        <p>Un estudio integrado de física y educación física</p>
+        <a href="#resumen" class="btn">Explorar Informe</a>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#resumen">Resumen</a></li>
+            <li><a href="#introduccion">Introducción</a></li>
+            <li><a href="#marco-teorico">Marco Teórico</a></li>
+            <li><a href="#procedimiento">Procedimiento</a></li>
+            <li><a href="#resultados">Resultados</a></li>
+            <li><a href="#conclusiones">Conclusiones</a></li>
+            <li><a href="#apendice">Apéndice</a></li>
+            <li><a href="#bibliografia">Bibliografía</a></li>
+        </ul>
+    </nav>
+
+    <!-- Resumen -->
+    <section id="resumen" class="fade-in">
+        <h2>Resumen Ejecutivo</h2>
+        <div class="card">
+            <i class="fas fa-file-alt"></i>
+            <h3>Compendio del Proyecto</h3>
+            <p>En este trabajo se realizó un experimento en grupo donde el objetivo era calcular el rendimiento atlético con cálculos de aceleración y velocidades, usando una combinación del MRU (Movimiento Rectilíneo Uniforme) y MRUV (Movimiento Rectilíneo Uniformemente Variado) de cada integrante.</p>
+        </div>
+    </section>
+
+    <!-- Introducción -->
+    <section id="introduccion">
+        <h2>Introducción</h2>
+        <div class="card">
+            <i class="fas fa-bullseye"></i>
+            <h3>Objetivos de la Investigación</h3>
+            <p>Entre el grupo realizamos un experimento para calcular el MRU y MRUV de cada integrante del grupo. Nuestro objetivo es calcular el rendimiento atlético con cálculos de aceleración y velocidades. Para este experimento participaron 4 sujetos de prueba.</p>
+        </div>
+        <div class="card">
+            <i class="fas fa-book-open"></i>
+            <h3>Procedimiento</h3>
+            <p>Todo el experimento se hizo en el andén, un espacio deportivo. Los materiales usados fueron:</p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li>4 integrantes del grupo</li>
+                <li>Papel y lápiz</li>
+                <li>Teoría de MRU y MRUV</li>
+                <li>Cinta medidora</li>
+                <li>Celular (app de cronómetro)</li>
+            </ul>
+            <p style="margin-top: 15px;">Entre el equipo medimos la cancha, sacando medidas de 45 metros. Cada integrante corrió mientras los demás tomaban los tiempos con cronómetros en la mitad y al final del recorrido.</p>
+        </div>
+    </section>
+
+    <!-- Marco Teórico -->
+<section id="marco-teorico">
+    <h2>Marco Teórico</h2>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab(event, 'fisica')">Física</button>
+        <button class="tab-btn" onclick="openTab(event, 'ed-fisica')">Educación Física</button>
+    </div>
+    
+    <div id="fisica" class="tab-content active">
+        <div class="card">
+            <i class="fas fa-atom"></i>
+            <h3>Conceptos Físicos Aplicados</h3>
+            <p>El análisis biomecánico de la carrera se basa en principios físicos fundamentales:</p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li><strong>MRU (Movimiento Rectilíneo Uniforme):</strong> Cuando un cuerpo se mueve con velocidad constante.</li>
+                <li><strong>MRUV (Movimiento Rectilíneo Uniformemente Variado):</strong> Cuando un cuerpo experimenta aceleración constante.</li>
+                <li><strong>Velocidad:</strong> Relación entre distancia recorrida y tiempo empleado (v = Δx/Δt).</li>
+                <li><strong>Aceleración:</strong> Cambio de velocidad por unidad de tiempo (a = Δv/Δt).</li>
+            </ul>
+
+            <h4 style="margin-top: 20px;">Otros conceptos relacionados</h4>
+            <ul style="margin-left: 20px;">
+                <li><strong>Intervalos de tiempo:</strong> Tiempo transcurrido entre dos eventos.</li>
+                <li><strong>Velocidad media (Vm):</strong> Distancia recorrida dividida por el tiempo transcurrido. Indica qué tan rápido se movió algo en promedio.</li>
+                <li><strong>Aceleración media (Am):</strong> Cambio de velocidad dividido por el tiempo transcurrido. Indica cómo cambió la velocidad en promedio.</li>
+            </ul>
+
+            <h4 style="margin-top: 20px;">Tipos de Músculos Involucrados</h4>
+            <p>Los músculos permiten el movimiento del cuerpo. En la carrera se activan principalmente los de las piernas (cuádriceps, glúteos, pantorrillas e isquiotibiales), pero también los de la zona media para la estabilización, los pies y tobillos, y los brazos y espalda para el equilibrio y ritmo.</p>
+
+            <h4 style="margin-top: 20px;">Técnica de Carrera</h4>
+            <p>Una buena técnica de carrera ayuda a prevenir lesiones y mejorar el rendimiento. Se recomienda una postura erguida con la mirada al frente, hombros relajados y espalda recta. Los brazos deben flexionarse a 90°, moviéndose de forma coordinada. La zancada debe ser natural y la pisada con la parte media del pie. La respiración debe ser profunda y rítmica.</p>
+
+            <div class="chart-container" style="margin-top: 20px;">
+                <canvas id="physicsChart"></canvas>
+            </div>
+        </div>
+    </div>
+</section>
+<div id="ed-fisica" class="tab-content">
+  <div class="card">
+    <i class="fas fa-running"></i>
+    <h3>Biomecánica de la Carrera</h3>
+    <p>La biomecánica estudia los movimientos del cuerpo humano durante la carrera, analizando:</p>
+
+    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; margin-top: 15px;">
+      <div style="text-align: center; margin: 15px;">
+        <p>Tecnica de los estudiantes:</p>
+        <video autoplay muted loop id="miVideo">
+          <source src="Estudiantes.mp4" type="video/mp4">
+          Tu navegador no soporta el video.
+        </video>
+      </div>
+
+      <div style="text-align: center; margin: 15px;">
+        <i class="fas fa-check-circle" style="color: var(--secondary-color); font-size: 2rem;"></i>
+        <p>Tecnica Correcta</p>
+        <img src="https://hips.hearstapps.com/hmg-prod/images/giphy-1-1555599723.gif?crop=1xw:1xh;center,top&resize=640:*" alt="Tecnica Correcta">
+      </div>
+    </div>
+
+    <!-- Enlace a otra página HTML -->
+    <div style="text-align: center; margin-top: 20px;">
+      <a href="Tecnica_de_carrera.html" style="color: var(--primary-color); font-weight: bold; text-decoration: none;">
+        Analisis de las técnicas
+      </a>
+    </div>
+
+  </div>
+</div>
+</section>
+
+    <!-- Procedimiento -->
+    <section id="procedimiento">
+        <h2>Procedimiento Experimental</h2>
+        <div class="card">
+            <i class="fas fa-clipboard-list"></i>
+            <h3>Metodología Aplicada</h3>
+            <p>El procedimiento seguido fue:</p>
+            <ol style="margin-left: 20px; margin-top: 15px;">
+                <li style="margin-bottom: 10px;">Medición del espacio de carrera (45 metros)</li>
+                <li style="margin-bottom: 10px;">Colocación de cronometradores en la mitad (22.5m) y final (45m)</li>
+                <li style="margin-bottom: 10px;">Cada participante corrió la distancia completa</li>
+                <li style="margin-bottom: 10px;">Registro de tiempos parciales y totales</li>
+                <li style="margin-bottom: 10px;">Cálculo de velocidades y aceleraciones</li>
+            </ol>
+        </div>
+    </section>
+
+    <!-- Resultados -->
+    <section id="resultados">
+        <h2>Resultados Obtenidos</h2>
+        
+        <!-- Tabla Joaquín -->
+        <div class="card">
+            <i class="fas fa-user"></i>
+            <h3>Datos de Joaquín</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tiempo (s)</th>
+                        <th>Velocidad (m/s)</th>
+                        <th>Velocidad Media (m/s)</th>
+                        <th>Aceleración (m/s²)</th>
+                        <th>Aceleración Media (m/s²)</th>
+                        <th>Masa (kg)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>3.15</td>
+                        <td>4.761</td>
+                        <td rowspan="3">6.338</td>
+                        <td>1.511</td>
+                        <td rowspan="3">0.892</td>
+                        <td rowspan="3">73</td>
+                    </tr>
+                    <tr>
+                        <td>5.7</td>
+                        <td>7.812</td>
+                        <td>1.589</td>
+                    </tr>
+                    <tr>
+                        <td>7.10</td>
+                        <td>7.389</td>
+                        <td>0.208</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Tabla Rocío -->
+        <div class="card">
+            <i class="fas fa-user"></i>
+            <h3>Datos de Rocío</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tiempo (s)</th>
+                        <th>Velocidad (m/s)</th>
+                        <th>Velocidad Media (m/s)</th>
+                        <th>Aceleración (m/s²)</th>
+                        <th>Aceleración Media (m/s²)</th>
+                        <th>Masa (kg)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>3.70</td>
+                        <td>4.054</td>
+                        <td rowspan="3">4.923</td>
+                        <td>1.095</td>
+                        <td rowspan="3">0.538</td>
+                        <td rowspan="3">55</td>
+                    </tr>
+                    <tr>
+                        <td>6.22</td>
+                        <td>5.952</td>
+                        <td>0.753</td>
+                    </tr>
+                    <tr>
+                        <td>9.14</td>
+                        <td>5.136</td>
+                        <td>0.279</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Tabla Sara -->
+        <div class="card">
+            <i class="fas fa-user"></i>
+            <h3>Datos de Sara</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tiempo (s)</th>
+                        <th>Velocidad (m/s)</th>
+                        <th>Velocidad Media (m/s)</th>
+                        <th>Aceleración (m/s²)</th>
+                        <th>Aceleración Media (m/s²)</th>
+                        <th>Masa (kg)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>3.47</td>
+                        <td>4.332</td>
+                        <td rowspan="3">5.421</td>
+                        <td>1.248</td>
+                        <td rowspan="3">0.653</td>
+                        <td rowspan="3">43</td>
+                    </tr>
+                    <tr>
+                        <td>5.72</td>
+                        <td>6.666</td>
+                        <td>0.683</td>
+                    </tr>
+                    <tr>
+                        <td>8.30</td>
+                        <td>6.578</td>
+                        <td>0.038</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        
+ <div class="card">
+        <i class="fas fa-chart-line"></i>
+        <h3>Gráficos de Movimiento</h3>
+        
+        <!-- Gráfico de Posición vs Tiempo -->
+        <div class="chart-container">
+            <canvas id="positionChart"></canvas>
+        </div>
+        
+        <!-- Gráfico de Velocidad vs Tiempo -->
+        <div class="chart-container">
+            <canvas id="velocityChart"></canvas>
+        </div>
+        
+        <!-- Gráfico de Aceleración vs Tiempo -->
+        <div class="chart-container">
+            <canvas id="accelerationChart"></canvas>
+        </div>
+    </div>
+</section>
+
+
+    <!-- Conclusiones -->
+<section id="conclusiones">
+    <h2>Conclusiones</h2>
+    <div class="accordion">
+        <div class="accordion-item">
+            <div class="accordion-header">
+                <span>Análisis Detallado del Rendimiento</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="accordion-content">
+                <p>Durante la práctica se comprobó que, aunque la velocidad tiende a ser constante en el recorrido total, hubo una tendencia clara a acelerar entre el primer y segundo tramo, lo cual indica una fase de aceleración progresiva al comenzar. También se observó una disminución del rendimiento en el tramo final, probablemente por el desgaste físico.</p>
+                <p>Además, el participante con mayor peso corporal obtuvo la mayor velocidad media y aceleración, lo que podría estar relacionado con su actividad extracurricular y adaptación física.</p>
+                <p>Se destacó que la técnica de carrera y la explosividad en los primeros metros fueron claves para el rendimiento general.</p>
+                
+                <h4 style="margin-top: 20px; color: var(--primary-color);">⏱ Tiempos por Tramo</h4>
+                <table style="margin-top: 15px;">
+                    <thead>
+                        <tr>
+                            <th>Participante</th>
+                            <th>1er Tramo</th>
+                            <th>2do Tramo</th>
+                            <th>3er Tramo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Joaquín</td>
+                            <td>3.15 s</td>
+                            <td>2.55 s</td>
+                            <td>1.40 s</td>
+                        </tr>
+                        <tr>
+                            <td>Rocío</td>
+                            <td>3.70 s</td>
+                            <td>2.52 s</td>
+                            <td>2.92 s</td>
+                        </tr>
+                        <tr>
+                            <td>Sara</td>
+                            <td>3.47 s</td>
+                            <td>2.25 s</td>
+                            <td>2.58 s</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <div class="accordion-header">
+                <span>🥇 Ranking de Participantes</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="accordion-content">
+                <div style="background: rgba(255, 215, 0, 0.1); padding: 15px; border-radius: 5px; margin-bottom: 15px; border-left: 4px solid gold;">
+                    <h4 style="color: gold;">🏆 1° Lugar: Joaquín</h4>
+                    <p><strong>Tiempo total:</strong> 7.10 segundos</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Mejor tiempo global</li>
+                        <li>Mostró mayor aceleración entre tramos y mejor ritmo</li>
+                        <li>Explosivo desde el comienzo, marcando ventaja rápidamente</li>
+                        <li>Su técnica fue eficaz y constante</li>
+                    </ul>
+                </div>
+                
+                <div style="background: rgba(192, 192, 192, 0.1); padding: 15px; border-radius: 5px; margin-bottom: 15px; border-left: 4px solid silver;">
+                    <h4 style="color: silver;">🥈 2° Lugar: Sara</h4>
+                    <p><strong>Tiempo total:</strong> 8.30 segundos</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Mejor segundo tramo (2.25 s)</li>
+                        <li>Aceleración destacable pero no tan consistente</li>
+                        <li>Bajón en el tercer tramo, lo que impidió una mejor posición</li>
+                    </ul>
+                </div>
+                
+                <div style="background: rgba(205, 127, 50, 0.1); padding: 15px; border-radius: 5px; margin-bottom: 15px; border-left: 4px solid #cd7f32;">
+                    <h4 style="color: #cd7f32;">🥉 3° Lugar: Rocío</h4>
+                    <p><strong>Tiempo total:</strong> 9.14 segundos</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Buen segundo tramo pero rendimiento más bajo en los otros dos</li>
+                        <li>Alto contraste entre tramos, posible fatiga o menor técnica</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <div class="accordion-header">
+                <span>🧠 Hipótesis y Conclusiones</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="accordion-content">
+                <ul style="margin-left: 20px;">
+                    <li style="margin-bottom: 10px;"><strong>La persona de mayor peso corporal es más rápida.</strong><br>
+                    → Confirmado en este experimento: Joaquín (mayor peso) logró buena velocidad media y aceleración.</li>
+                    
+                    <li style="margin-bottom: 10px;"><strong>La persona más explosiva logra ventaja desde el inicio.</strong><br>
+                    → Joaquín aceleró rápidamente en los primeros metros y ganó.</li>
+                    
+                    <li style="margin-bottom: 10px;"><strong>El segundo tramo tiende a ser más rápido que el primero.</strong><br>
+                    → Se observó en todos los participantes.</li>
+                    
+                    <li style="margin-bottom: 10px;"><strong>La pérdida de velocidad en el último tramo es común.</strong><br>
+                    → Todos tuvieron un descenso o cambio en el rendimiento final.</li>
+                    
+                    <li style="margin-bottom: 10px;"><strong>Una mejor técnica de carrera influye directamente en los resultados.</strong><br>
+                    → Joaquín, con técnica eficaz, logró mantener el ritmo.</li>
+                    
+                    <li><strong>La persona más alta del grupo es más lenta. (Hipótesis a validar con datos de altura)</strong><br>
+                    → Podría explorarse si la estatura afecta la aceleración o agilidad.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+    <!-- Apéndice -->
+    <section id="apendice">
+        <h2>Apéndice</h2>
+        <div class="card">
+            <i class="fas fa-calculator"></i>
+            <h3>Desarrollo Matemático</h3>
+            <p>Cálculos detallados para un participante:</p>
+            <div style="background: var(--light-color); padding: 20px; border-radius: 5px; margin-top: 15px;">
+                <h4 style="color: var(--primary-color); margin-bottom: 10px;">Ejemplo de Cálculo de Velocidad:</h4>
+                <p>v = Δx / Δt</p>
+                <p>Primer tramo (Joaquín): v = 22.5 m / 3.15 s = 7.142 m/s</p>
+                <p>Segundo tramo (Joaquín): v = 22.5 m / (5.7s - 3.15s) = 8.823 m/s</p>
+                <h4 style="color: var(--primary-color); margin: 15px 0 10px 0;">Cálculo de Aceleración:</h4>
+                <p>a = Δv / Δt = (8.823 m/s - 7.142 m/s) / 2.55 s = 0.659 m/s²</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bibliografía -->
+    <section id="bibliografia">
+        <h2>Bibliografía</h2>
+        <div class="card">
+            <i class="fas fa-book"></i>
+            <h3>Referencias Consultadas</h3>
+            <ul style="margin-left: 20px;">
+                <li style="margin-bottom: 10px;">Modulo de Fisica 4to Año Comunicacion - Diego Mazzei</li>
+                <li style="margin-bottom: 10px;">Pizarron D - Diego Mazzei</li>            </ul>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>Proyecto de Análisis Biomecánico - Joaquin Riedel, Rocio Cáceres, Florencia Nuñez, Sara Chacón - Instituto Justo Jose Urquiza - 2025</p>
+        <div style="margin-top: 20px;">
+            <a href="#inicio" style="color: white; margin: 0 10px;"><i class="fas fa-arrow-up"></i> Volver al inicio</a>
+        </div>
+    </footer>
+
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Datos de los participantes (con aceleraciones positivas y negativas para demostración)
+const participantsData = [
+    { 
+        name: "Joaquín", 
+        times: [3.15, 5.7, 7.10],
+        velocities: [4.761, 7.812, 7.389],
+        accelerations: [1.511, -1.589, 0.208], // Aceleración negativa en segundo tramo
+        avgVelocity: 6.338,
+        avgAcceleration: 0.892,
+        mass: 73
+    },
+    { 
+        name: "Rocío", 
+        times: [3.70, 6.22, 9.14],
+        velocities: [4.054, 5.952, 5.136],
+        accelerations: [1.095, 0.753, -0.279], // Aceleración negativa en tercer tramo
+        avgVelocity: 4.923,
+        avgAcceleration: 0.538,
+        mass: 55
+    },
+    { 
+        name: "Sara", 
+        times: [3.47, 5.72, 8.30],
+        velocities: [4.332, 6.666, 6.578],
+        accelerations: [1.248, -0.683, 0.038], // Aceleración negativa en segundo tramo
+        avgVelocity: 5.421,
+        avgAcceleration: 0.653,
+        mass: 43
+    }
+];
+
+// Función principal para crear gráficos de movimiento
+function createSquareCharts() {
+    // Procesamiento de datos de movimiento con parábolas correctas
+    const motionData = participantsData.map(p => {
+        const segments = [];
+        let currentTime = 0;
+        let currentPosition = 0;
+        let currentVelocity = p.velocities[0] || 0;
+        
+        // Generación de segmentos con movimiento parabólico correcto
+        for (let i = 0; i < p.times.length; i++) {
+            const dt = p.times[i] - (i > 0 ? p.times[i-1] : 0);
+            const a = p.accelerations[i] || 0;
+            
+            // Creación de puntos para la trayectoria parabólica
+            const segmentPoints = [];
+            const steps = 20; // Más puntos para mejor visualización de la parábola
+            for (let t = 0; t <= dt; t += dt/steps) {
+                const y = currentPosition + currentVelocity*t + 0.5*a*t*t;
+                segmentPoints.push({
+                    x: currentTime + t,
+                    y: y
+                });
+            }
+            
+            // Asegurar punto final exacto
+            const finalY = currentPosition + currentVelocity*dt + 0.5*a*dt*dt;
+            segmentPoints.push({
+                x: currentTime + dt,
+                y: finalY
+            });
+            
+            segments.push({
+                points: segmentPoints,
+                acceleration: a,
+                velocity: p.velocities[i] || 0
+            });
+            
+            // Actualización para el siguiente segmento
+            currentTime += dt;
+            currentPosition = finalY;
+            currentVelocity = p.velocities[i] || 0;
+        }
+        
+        return {
+            name: p.name,
+            segments: segments,
+            velocities: p.velocities,
+            accelerations: p.accelerations,
+            positions: segments.flatMap(segment => segment.points)
+        };
+    });
+
+    // Configuración de gráficos
+    setupPositionChart(motionData);
+    setupVelocityChart(motionData);
+    setupAccelerationChart(motionData);
+}
+
+// Configuración del gráfico de posición con parábolas
+function setupPositionChart(motionData) {
+    const ctx = document.getElementById('positionChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: motionData.map((p, i) => ({
+                label: p.name,
+                data: p.segments.flatMap(s => s.points),
+                showLine: true,
+                borderColor: getParticipantColor(i),
+                backgroundColor: 'rgba(0, 0, 0, 0)',
+                borderWidth: 2,
+                pointRadius: 0,
+                tension: 0 // Importante para mostrar la parábola real
+            }))
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    type: 'linear',
+                    position: 'bottom',
+                    title: { display: true, text: 'Tiempo (s)' }
+                },
+                y: { 
+                    title: { display: true, text: 'Posición (m)' },
+                    min: 0 // Empezar desde 0 para mejor visualización
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: context => {
+                            // Encontrar la aceleración en este punto
+                            const segment = motionData[context.datasetIndex].segments.find(s => 
+                                context.parsed.x >= s.points[0].x && 
+                                context.parsed.x <= s.points[s.points.length-1].x
+                            );
+                            const accel = segment ? segment.acceleration : 0;
+                            return [
+                                `${context.dataset.label}`,
+                                `Posición: ${context.parsed.y.toFixed(2)} m`,
+                                `Tiempo: ${context.parsed.x.toFixed(2)} s`,
+                                `Aceleración: ${accel.toFixed(2)} m/s²`
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Configuración del gráfico de velocidad
+function setupVelocityChart(motionData) {
+    const ctx = document.getElementById('velocityChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: motionData.map((p, i) => ({
+                label: p.name,
+                data: generateVelocityPoints(p),
+                showLine: true,
+                borderColor: getParticipantColor(i),
+                backgroundColor: 'rgba(0, 0, 0, 0)',
+                borderWidth: 2,
+                pointRadius: 0
+            }))
+        },
+        options: getCommonChartOptions('Velocidad (m/s)')
+    });
+}
+
+// Configuración del gráfico de aceleración
+function setupAccelerationChart(motionData) {
+    const ctx = document.getElementById('accelerationChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: motionData.map((p, i) => ({
+                label: p.name,
+                data: generateAccelerationPoints(p),
+                showLine: true,
+                borderColor: getParticipantColor(i),
+                backgroundColor: 'rgba(0, 0, 0, 0)',
+                borderWidth: 2,
+                pointRadius: 0,
+                stepped: true
+            }))
+        },
+        options: getCommonChartOptions('Aceleración (m/s²)')
+    });
+}
+
+// Función auxiliar para generar puntos de velocidad
+function generateVelocityPoints(participant) {
+    const points = [];
+    let currentTime = 0;
+    let currentVelocity = participant.velocities[0] || 0;
+    
+    for (let i = 0; i < participant.segments.length; i++) {
+        const segment = participant.segments[i];
+        const dt = segment.points[segment.points.length-1].x - 
+                 (i > 0 ? participant.segments[i-1].points[participant.segments[i-1].points.length-1].x : 0);
+        
+        points.push({ x: currentTime, y: currentVelocity });
+        points.push({ x: currentTime + dt, y: participant.velocities[i] || 0 });
+        
+        currentTime += dt;
+        currentVelocity = participant.velocities[i] || 0;
+    }
+    
+    return points;
+}
+
+// Función auxiliar para generar puntos de aceleración
+function generateAccelerationPoints(participant) {
+    const points = [];
+    let currentTime = 0;
+    
+    for (let i = 0; i < participant.segments.length; i++) {
+        const segment = participant.segments[i];
+        const dt = segment.points[segment.points.length-1].x - 
+                 (i > 0 ? participant.segments[i-1].points[participant.segments[i-1].points.length-1].x : 0);
+        
+        points.push({ x: currentTime, y: segment.acceleration });
+        points.push({ x: currentTime + dt - 0.001, y: segment.acceleration });
+        
+        currentTime += dt;
+    }
+    
+    return points;
+}
+
+// Función para colores consistentes
+function getParticipantColor(index) {
+    const colors = [
+        'rgba(75, 192, 192, 1)',   // Verde azulado
+        'rgba(255, 99, 132, 1)',    // Rojo
+        'rgba(54, 162, 235, 1)'     // Azul
+    ];
+    return colors[index % colors.length];
+}
+
+// Opciones comunes para gráficos
+function getCommonChartOptions(yTitle) {
+    return {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: { display: true, text: 'Tiempo (s)' }
+            },
+            y: { 
+                title: { display: true, text: yTitle },
+                beginAtZero: false // Para mejor visualización de valores negativos
+            }
+        }
+    };
+}
+
+        // Tabs functionality
+        function openTab(evt, tabName) {
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+            
+            const tabBtns = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < tabBtns.length; i++) {
+                tabBtns[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Accordion functionality
+        const accordionHeaders = document.querySelectorAll(".accordion-header");
+        accordionHeaders.forEach(header => {
+            header.addEventListener("click", () => {
+                const accordionItem = header.parentElement;
+                accordionItem.classList.toggle("active");
+                
+                const icon = header.querySelector("i");
+                if (accordionItem.classList.contains("active")) {
+                    icon.classList.remove("fa-chevron-down");
+                    icon.classList.add("fa-chevron-up");
+                } else {
+                    icon.classList.remove("fa-chevron-up");
+                    icon.classList.add("fa-chevron-down");
+                }
+            });
+        });
+
+        // Theme toggle
+        const themeToggle = document.getElementById("themeToggle");
+        themeToggle.addEventListener("click", () => {
+            document.body.setAttribute("data-theme", 
+                document.body.getAttribute("data-theme") === "dark" ? "light" : "dark");
+            
+            const icon = themeToggle.querySelector("i");
+            if (document.body.getAttribute("data-theme") === "dark") {
+                icon.classList.remove("fa-moon");
+                icon.classList.add("fa-sun");
+            } else {
+                icon.classList.remove("fa-sun");
+                icon.classList.add("fa-moon");
+            }
+        });
+
+        // Crear gráficos comparativos
+        function createCharts() {
+            // Physics chart (comparación de velocidades)
+            const physicsCtx = document.getElementById('physicsChart').getContext('2d');
+            new Chart(physicsCtx, {
+                type: 'bar',
+                data: {
+                    labels: participantsData.map(p => p.name),
+                    datasets: [
+                        {
+                            label: 'Velocidad Máxima (m/s)',
+                            data: participantsData.map(p => Math.max(...p.velocities)),
+                            backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                            borderColor: 'rgba(52, 152, 219, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Velocidad Media (m/s)',
+                            data: participantsData.map(p => p.avgVelocity),
+                            backgroundColor: 'rgba(46, 204, 113, 0.7)',
+                            borderColor: 'rgba(46, 204, 113, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Velocidad (m/s)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Comparison chart
+            const comparisonCtx = document.getElementById('comparisonChart').getContext('2d');
+            new Chart(comparisonCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Velocidad Media', 'Aceleración Media', 'Velocidad Máx.', 'Consistencia', 'Masa'],
+                    datasets: participantsData.map(p => ({
+                        label: p.name,
+                        data: [
+                            p.avgVelocity,
+                            p.avgAcceleration,
+                            Math.max(...p.velocities),
+                            (1 - (Math.max(...p.velocities) - Math.min(...p.velocities)) / Math.max(...p.velocities)) * 10
+                        ],
+                        backgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.2)`,
+                        borderColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 1)`,
+                        borderWidth: 2,
+                        pointBackgroundColor: `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 1)`,
+                        pointRadius: 4
+                    }))
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true
+                            },
+                            suggestedMin: 0
+                        }
+                    }
+                }
+            });
+        }
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Animation on scroll
+        const fadeElements = document.querySelectorAll('.fade-in');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        fadeElements.forEach(el => {
+            el.style.opacity = 0;
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        window.onload = function() {
+        createSquareCharts();
+        // Puedes mantener otros gráficos si los necesitas
+        // createComparisonChart();
+};      // <-- Corregido
+    </script>
+</body>
+</html>

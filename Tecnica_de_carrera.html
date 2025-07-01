@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Técnicas de Carrera - Análisis Educativo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #00796b;
+      --primary-light: #e0f2f1;
+      --secondary-color: #00695c;
+      --accent-color: #ff6f00;
+      --text-color: #333;
+      --light-bg: #f8f9fa;
+      --white: #ffffff;
+      --dark: #004d40;
+      --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #f5f5f5);
+      color: var(--text-color);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-attachment: fixed;
+    }
+    
+    header {
+      background: linear-gradient(135deg, var(--primary-color), var(--dark));
+      color: var(--white);
+      padding: 2.5rem 1rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 Q50,10 100,0 L100,100 Q50,90 0,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+      background-size: 100% 100%;
+      opacity: 0.2;
+    }
+    
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 2;
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      opacity: 0.9;
+      position: relative;
+      z-index: 2;
+    }
+    
+    h2 {
+      color: var(--secondary-color);
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+      font-size: 1.8rem;
+    }
+    
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 70px;
+      height: 4px;
+      background: linear-gradient(to right, var(--accent-color), var(--secondary-color));
+      border-radius: 2px;
+    }
+    
+    main {
+      flex: 1;
+      padding: 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    section {
+      margin: 2.5rem auto;
+      background: var(--white);
+      padding: 2.5rem;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--accent-color), var(--primary-color));
+    }
+    
+    section:hover {
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      transform: translateY(-5px);
+    }
+    
+    .video-container {
+      margin: 2rem 0;
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      background: #000;
+      transition: var(--transition);
+    }
+    
+    .video-container:hover {
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    }
+    
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    
+    .video-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0,121,107,0.7), rgba(0,77,64,0.8));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+      z-index: 10;
+      cursor: pointer;
+    }
+    
+    .video-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    .video-overlay i {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
+    }
+    
+    .video-overlay:hover i {
+      transform: scale(1.1);
+    }
+    
+    .video-overlay h3 {
+      font-size: 1.8rem;
+      text-align: center;
+      max-width: 80%;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    .analysis-box {
+      background: linear-gradient(to right, var(--primary-light), #f5f5f5);
+      padding: 1.5rem;
+      border-left: 5px solid var(--accent-color);
+      margin: 2rem 0;
+      border-radius: 0 8px 8px 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      transition: var(--transition);
+    }
+    
+    .analysis-box:hover {
+      transform: translateX(5px);
+    }
+    
+    .analysis-box strong {
+      display: block;
+      margin-bottom: 0.8rem;
+      color: var(--secondary-color);
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .analysis-box strong i {
+      margin-right: 10px;
+      color: var(--accent-color);
+    }
+    
+    ul {
+      padding-left: 1.5rem;
+    }
+    
+    li {
+      margin-bottom: 0.8rem;
+      position: relative;
+      padding-left: 1.8rem;
+    }
+    
+    li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      width: 12px;
+      height: 12px;
+      background-color: var(--accent-color);
+      border-radius: 50%;
+    }
+    
+    .key-points {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    
+    .point-card {
+      background: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      text-align: center;
+      transition: var(--transition);
+      border-top: 4px solid var(--primary-color);
+    }
+    
+    .point-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+    
+    .point-card i {
+      font-size: 2.5rem;
+      color: var(--accent-color);
+      margin-bottom: 1rem;
+    }
+    
+    .point-card h3 {
+      color: var(--secondary-color);
+      margin-bottom: 0.5rem;
+    }
+    
+    .progress-container {
+      margin: 2rem 0;
+    }
+    
+    .progress-bar {
+      height: 8px;
+      background-color: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--accent-color), var(--primary-color));
+      border-radius: 4px;
+      width: 0;
+      transition: width 1.5s ease-in-out;
+    }
+    
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: linear-gradient(135deg, var(--dark), var(--primary-color));
+      color: rgba(255,255,255,0.8);
+      margin-top: 3rem;
+      position: relative;
+    }
+    
+    footer::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 Q50,100 100,0 L100,100 L0,100 Z" fill="%23007a6b"/></svg>');
+      background-size: 100% 100%;
+    }
+    
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: var(--accent-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.4s ease;
+      z-index: 100;
+    }
+    
+    .back-to-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .back-to-top:hover {
+      transform: translateY(-5px);
+      background: var(--primary-color);
+    }
+    
+    /* Responsive design */
+    @media (max-width: 900px) {
+      section {
+        padding: 2rem;
+      }
+      
+      h1 {
+        font-size: 2.3rem;
+      }
+      
+      h2 {
+        font-size: 1.6rem;
+      }
+      
+      .video-overlay h3 {
+        font-size: 1.5rem;
+      }
+    }
+    
+    @media (max-width: 600px) {
+      header {
+        padding: 2rem 1rem;
+      }
+      
+      section {
+        padding: 1.5rem;
+        margin: 1.5rem auto;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      h2 {
+        font-size: 1.4rem;
+      }
+      
+      .video-overlay h3 {
+        font-size: 1.2rem;
+      }
+      
+      .video-overlay i {
+        font-size: 3rem;
+      }
+      
+      .analysis-box {
+        padding: 1.2rem;
+      }
+      
+      .key-points {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 400px) {
+      header {
+        padding: 1.5rem 1rem;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      .subtitle {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="sr-only">Saltar al contenido principal</a>
+  
+  <header>
+    <h1>Técnicas de Carrera</h1>
+    <p class="subtitle">Estudio, práctica y corrección en el aula</p>
+  </header>
+  
+  <main id="main-content">
+    <section>
+      <h2><i class="fas fa-running"></i> Técnica Correcta de Carrera</h2>
+      <p>La técnica correcta de carrera incluye los siguientes elementos fundamentales para maximizar la eficiencia y prevenir lesiones:</p>
+      
+      <div class="key-points">
+        <div class="point-card">
+          <i class="fas fa-user"></i>
+          <h3>Postura Corporal</h3>
+          <p>Columna recta, cabeza al frente, hombros relajados</p>
+        </div>
+        <div class="point-card">
+          <i class="fas fa-shoe-prints"></i>
+          <h3>Zancada Eficiente</h3>
+          <p>Amplia pero controlada, contacto medio del pie</p>
+        </div>
+        <div class="point-card">
+          <i class="fas fa-hands"></i>
+          <h3>Movimiento de Brazos</h3>
+          <p>Flexión de 90°, movimiento natural y coordinado</p>
+        </div>
+        <div class="point-card">
+          <i class="fas fa-lungs"></i>
+          <h3>Respiración</h3>
+          <p>Ritmo constante coordinado con la zancada</p>
+        </div>
+      </div>
+      
+      <div class="video-container">
+        <div class="video-overlay" id="overlay1">
+          <i class="fas fa-play-circle"></i>
+          <h3>Haz clic para reproducir el video demostrativo</h3>
+        </div>
+        <!-- Video ejemplo correcto -->
+        <iframe 
+          id="video1"
+          src="https://hips.hearstapps.com/hmg-prod/images/giphy-1-1555599723.gif?crop=1xw:1xh;center,top&resize=640:*" 
+          allowfullscreen
+          title="Video demostrativo de técnica correcta de carrera"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          frameborder="0"
+        ></iframe>
+      </div>
+
+      <div class="analysis-box" role="region" aria-labelledby="analisis-tecnica">
+        <strong id="analisis-tecnica"><i class="fas fa-chart-line"></i> Análisis del video:</strong>
+        <ul>
+          <li><strong>Postura:</strong> Columna perfectamente alineada, cabeza en posición neutral, mirada al frente a unos 20-30 metros</li>
+          <li><strong>Zancada:</strong> Longitud óptima que permite máximo impulso sin sobrezancada, contacto con el suelo con la parte media del pie</li>
+          <li><strong>Brazos:</strong> Movimiento pendular natural con ángulo de 90°, sin cruzar la línea media del cuerpo</li>
+          <li><strong>Respiración:</strong> Ritmo 2:2 (inhalación cada 2 pasos, exhalación cada 2 pasos) para una oxigenación eficiente</li>
+          <li><strong>Cadencia:</strong> 175 pasos por minuto, considerado el rango ideal para la mayoría de corredores</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2><i class="fas fa-users"></i> Práctica de los Estudiantes</h2>
+      <p>Durante la clase, los estudiantes aplicaron las técnicas aprendidas. A continuación se muestra el resultado de su práctica:</p>
+      
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="practice-progress"></div>
+        </div>
+        <div class="progress-labels">
+          <span>Principiante</span>
+          <span>Intermedio</span>
+          <span>Avanzado</span>
+        </div>
+      </div>
+      
+      <div class="video-container">
+        <div class="video-overlay" id="overlay2">
+          <i class="fas fa-play-circle"></i>
+          <h3>Haz clic para ver la práctica de los estudiantes</h3>
+        </div>
+        <!-- Video de estudiantes -->
+        <iframe 
+          id="video2"
+          src="Estudiantes.mp4" 
+          allowfullscreen
+          title="Video de estudiantes practicando técnicas de carrera"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          frameborder="0"
+        ></iframe>
+      </div>
+    </section>
+
+    <section>
+      <h2><i class="fas fa-clipboard-check"></i> Análisis y Correcciones</h2>
+      <div class="analysis-box" role="region" aria-labelledby="errores-comunes">
+        <strong id="errores-comunes"><i class="fas fa-exclamation-triangle"></i> Errores comunes observados:</strong>
+        <ul>
+          <li><strong>Postura:</strong> Inclinación excesiva del torso hacia adelante (40% de estudiantes) o atrás (15%)</li>
+          <li><strong>Coordinación:</strong> Brazos rígidos (25%) o movimiento asimétrico (20%)</li>
+          <li><strong>Zancada:</strong> Pasos demasiado cortos (35%) o sobrezancada (22%)</li>
+          <li><strong>Contacto con el suelo:</strong> Talonamiento excesivo (45%) o puntera (18%)</li>
+          <li><strong>Ritmo:</strong> Falta de constancia en la cadencia (60% de estudiantes)</li>
+        </ul>
+      </div>
+      
+      <div class="analysis-box" role="region" aria-labelledby="recomendaciones">
+        <strong id="recomendaciones"><i class="fas fa-lightbulb"></i> Recomendaciones para mejorar:</strong>
+        <ul>
+          <li><strong>Ejercicios de técnica:</strong> Realizar drills específicos 2-3 veces por semana (high knees, butt kicks, skipping)</li>
+          <li><strong>Autoanálisis:</strong> Grabar videos de seguimiento para identificar áreas de mejora</li>
+          <li><strong>Fortalecimiento:</strong> Ejercicios de core y movilidad articular</li>
+          <li><strong>Práctica rítmica:</strong> Usar metrónomo a 170-180 BPM para mejorar cadencia</li>
+          <li><strong>Ejercicios de respiración:</strong> Práctica de respiración diafragmática en reposo</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© <span id="current-year">2025</span> - Proyecto Educativo · Educación Física</p>
+    <p>Desarrollado con fines pedagógicos</p>
+  </footer>
+  
+  <div class="back-to-top" id="backToTop">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <script>
+    // Añadir año actual
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+    
+    // Función para manejar la reproducción de video
+    function setupVideo(videoId, overlayId) {
+      const overlay = document.getElementById(overlayId);
+      const iframe = document.getElementById(videoId);
+      
+      overlay.addEventListener('click', () => {
+        overlay.classList.add('hidden');
+        // Agregar parámetros para autoplay y mute
+        const src = iframe.src;
+        iframe.src = src.includes('?') ? 
+          src + '&autoplay=1&mute=1' : 
+          src + '?autoplay=1&mute=1';
+      });
+    }
+    
+    // Configurar videos
+    setupVideo('video1', 'overlay1');
+    setupVideo('video2', 'overlay2');
+    
+    // Botón de volver arriba
+    const backToTopBtn = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTopBtn.classList.add('visible');
+      } else {
+        backToTopBtn.classList.remove('visible');
+      }
+    });
+    
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Animación de la barra de progreso
+    window.addEventListener('scroll', () => {
+      const progressBar = document.getElementById('practice-progress');
+      const scrollPosition = window.scrollY;
+      const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollPosition / documentHeight) * 100;
+      
+      if (progress <= 100) {
+        progressBar.style.width = progress + '%';
+      }
+    });
+    
+    // Efecto de carga de la página
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.add('loaded');
+    });
+  </script>
+</body>
+</html>
